@@ -1,4 +1,4 @@
-etyllic-mario
+Etyllic Mario
 =============
 
-An example of Super Mario Clone with Etyllica Engine
+An example of Super Mario Clone using Etyllica Engine (v1.3).
