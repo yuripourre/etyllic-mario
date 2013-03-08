@@ -13,6 +13,10 @@ import br.com.etyllica.multimedia.Sound;
 
 public class YoshiHouse extends Application{
 
+	public YoshiHouse(int w, int h) {
+		super(w, h);
+	}
+
 	private Sound jump;
 	private Music music;
 
