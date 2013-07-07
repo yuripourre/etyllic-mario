@@ -6,7 +6,7 @@ import br.com.etyllica.core.event.KeyboardEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.event.Tecla;
 import br.com.etyllica.core.video.Grafico;
-import br.com.etyllica.layer.AnimatedImageLayer;
+import br.com.etyllica.layer.AnimatedLayer;
 import br.com.etyllica.layer.ImageLayer;
 import br.com.etyllica.multimedia.Music;
 import br.com.etyllica.multimedia.Sound;
@@ -25,7 +25,7 @@ public class YoshiHouse extends Application{
 	private ImageLayer marioLeft;
 	private ImageLayer marioRight;
 
-	private AnimatedImageLayer mario;
+	private AnimatedLayer mario;
 
 	private boolean right = true;
 	private boolean walking = false;
@@ -52,7 +52,7 @@ public class YoshiHouse extends Application{
 		marioRight = new ImageLayer("mario.png");
 		marioLeft = new ImageLayer("marioinv.png");
 
-		mario = new AnimatedImageLayer(30,groundPosition,32,32,marioRight.getPath());
+		mario = new AnimatedLayer(30,groundPosition,32,32,marioRight.getPath());
 
 		jumpSize = groundPosition-32;//groundPosition - 100 pixels 
 
