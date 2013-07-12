@@ -9,6 +9,7 @@ public class MarioExample extends EtyllicaFrame {
 
 	public MarioExample() {
 		super(255, 236);
+		initSound = true;
 	}
 	
 	public static void main(String[] args){
@@ -19,7 +20,7 @@ public class MarioExample extends EtyllicaFrame {
 	
 	@Override
 	public void startGame() {
-		
+				
 		setMainApplication(new YoshiHouse(w,h));
 	}
 	
