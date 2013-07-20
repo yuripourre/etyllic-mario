@@ -8,6 +8,7 @@ import br.com.etyllica.core.event.Tecla;
 import br.com.etyllica.core.video.Grafico;
 import br.com.etyllica.layer.AnimatedLayer;
 import br.com.etyllica.layer.ImageLayer;
+import br.com.etyllica.layer.StaticLayer;
 import br.com.etyllica.multimedia.Music;
 import br.com.etyllica.multimedia.Sound;
 
@@ -22,8 +23,8 @@ public class YoshiHouse extends Application{
 
 	private ImageLayer background;
 
-	private ImageLayer marioLeft;
-	private ImageLayer marioRight;
+	private StaticLayer marioLeft;
+	private StaticLayer marioRight;
 
 	private AnimatedLayer mario;
 
@@ -49,10 +50,11 @@ public class YoshiHouse extends Application{
 		background = new ImageLayer("yoshihouse.png");
 		loading = 20;
 
-		marioRight = new ImageLayer("mario.png");
-		marioLeft = new ImageLayer("marioinv.png");
+		marioRight = new StaticLayer("mario.png");
+		marioLeft = new StaticLayer("marioinv.png");
 
 		mario = new AnimatedLayer(30,groundPosition,32,32,marioRight.getPath());
+		mario.setNumeroFrames(2);
 
 		jumpSize = groundPosition-32;//groundPosition - 100 pixels 
 
@@ -64,11 +66,51 @@ public class YoshiHouse extends Application{
 
 
 		music = new Music("Yoster Island.mp3");
-		music.play(); 
-
-		loading = 100;
+		music.playStream();
 
 		updateAtFixedRate(40);
+		
+		loading = 100;
+
+	}
+	
+	@Override
+	public void timeUpdate(){
+		
+		mario.preAnima();
+		
+		//if walking
+		if(walking){
+			//if walking to Right
+			if(right){
+				mario.setX(mario.getX()+walkSpeed);
+				//if walking to Left
+			}else{
+				mario.setX(mario.getX()-walkSpeed);
+			}
+		}
+
+		//if jumping
+		if(jumping){
+
+			if(!fallen){
+
+				if(mario.getY()>jumpSize){
+					mario.setY(mario.getY()-jumpSpeed);	
+				}else{
+					startFallen();
+				}
+
+			}else{
+
+				if(mario.getY()<groundPosition){
+					mario.setY(mario.getY()+jumpSpeed);	
+				}else{
+					stopJump();
+				}
+
+			}
+		}
 
 	}
 
@@ -144,47 +186,7 @@ public class YoshiHouse extends Application{
 	@Override
 	public GUIEvent updateMouse(PointerEvent event) {
 
-		return GUIEvent	.NONE;
-	}
-
-	@Override
-	protected void timeUpdate(){
-
-		mario.preAnima();
-
-		//if walking
-		if(walking){
-			//if walking to Right
-			if(right){
-				mario.setX(mario.getX()+walkSpeed);
-				//if walking to Left
-			}else{
-				mario.setX(mario.getX()-walkSpeed);
-			}
-		}
-
-		//if jumping
-		if(jumping){
-
-			if(!fallen){
-
-				if(mario.getY()>jumpSize){
-					mario.setY(mario.getY()-jumpSpeed);	
-				}else{
-					startFallen();
-				}
-
-			}else{
-
-				if(mario.getY()<groundPosition){
-					mario.setY(mario.getY()+jumpSpeed);	
-				}else{
-					stopJump();
-				}
-
-			}
-		}
-
+		return GUIEvent.NONE;
 	}
 
 	//Methods to represent Player Actions
