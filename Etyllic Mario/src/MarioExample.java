@@ -20,7 +20,7 @@ public class MarioExample extends EtyllicaFrame {
 	
 	@Override
 	public void startGame() {
-				
+		hideCursor();
 		setMainApplication(new YoshiHouse(w,h));
 	}
 	

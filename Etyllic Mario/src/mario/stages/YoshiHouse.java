@@ -54,7 +54,7 @@ public class YoshiHouse extends Application{
 		marioLeft = new StaticLayer("marioinv.png");
 
 		mario = new AnimatedLayer(30,groundPosition,32,32,marioRight.getPath());
-		mario.setNumeroFrames(2);
+		mario.setFrames(2);
 
 		jumpSize = groundPosition-32;//groundPosition - 100 pixels 
 
@@ -232,7 +232,7 @@ public class YoshiHouse extends Application{
 	}
 
 	private void startWalking(){
-		mario.setNumeroFrames(2);
+		mario.setFrames(2);
 		mario.setStopped(false);
 		walking = true;
 	}	
@@ -255,7 +255,7 @@ public class YoshiHouse extends Application{
 	}
 
 	private void stopWalk(){
-		mario.setNumeroFrames(1);
+		mario.setFrames(1);
 		mario.setStopped(true);
 		walking = false;
 
