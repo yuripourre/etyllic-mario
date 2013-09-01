@@ -66,7 +66,7 @@ public class YoshiHouse extends Application{
 
 
 		music = new Music("Yoster Island.mp3");
-		music.playStream();
+		//music.play();
 
 		updateAtFixedRate(40);
 		
@@ -128,16 +128,16 @@ public class YoshiHouse extends Application{
 		if(!walking){
 
 			//UP Arrow
-			if(event.getPressed(Tecla.TSK_SETA_CIMA)){
+			if(event.getPressed(Tecla.TSK_UP_ARROW)||event.getPressed(Tecla.JOYSTICK_UP)){
 				lookUp();				
-			}else if(event.getReleased(Tecla.TSK_SETA_CIMA)){
+			}else if(event.getReleased(Tecla.TSK_UP_ARROW)||event.getPressed(Tecla.JOYSTICK_CENTER_Y)){
 				stand();
 			}
 
 			//DOWN Arrow
-			if(event.getPressed(Tecla.TSK_SETA_BAIXO)){
+			if(event.getPressed(Tecla.TSK_DOWN_ARROW)||event.getPressed(Tecla.JOYSTICK_DOWN)){
 				standDown();
-			}else if(event.getReleased(Tecla.TSK_SETA_BAIXO)){
+			}else if(event.getReleased(Tecla.TSK_DOWN_ARROW)||event.getReleased(Tecla.JOYSTICK_CENTER_Y)){
 				stand();
 			}
 		}
@@ -145,20 +145,20 @@ public class YoshiHouse extends Application{
 		if(!looking){
 
 			//RIGHT Arrow
-			if(event.getPressed(Tecla.TSK_SETA_DIREITA)){
+			if(event.getPressed(Tecla.TSK_RIGHT_ARROW)||event.getPressed(Tecla.JOYSTICK_RIGHT)){
 				turnRight();
 				startWalking();
 
-			}else if(event.getReleased(Tecla.TSK_SETA_DIREITA)){
+			}else if(event.getReleased(Tecla.TSK_RIGHT_ARROW)||event.getPressed(Tecla.JOYSTICK_CENTER_X)){
 				stopWalk();
 			}
 
 			//LEFT Arrow
-			if(event.getPressed(Tecla.TSK_SETA_ESQUERDA)){
+			if(event.getPressed(Tecla.TSK_LEFT_ARROW)||event.getPressed(Tecla.JOYSTICK_LEFT)){
 				turnLeft();
 				startWalking();
 
-			}else if(event.getReleased(Tecla.TSK_SETA_ESQUERDA)){
+			}else if(event.getReleased(Tecla.TSK_LEFT_ARROW)||event.getPressed(Tecla.JOYSTICK_CENTER_X)){
 				stopWalk();
 			}
 
@@ -166,18 +166,24 @@ public class YoshiHouse extends Application{
 		}else{
 			
 			//RIGHT ARROW
-			if(event.getPressed(Tecla.TSK_SETA_DIREITA)){
+			if(event.getPressed(Tecla.TSK_RIGHT_ARROW)||event.getPressed(Tecla.JOYSTICK_RIGHT)){
 				turnRight();
 			}
 			
 			//LEFT ARROW
-			else if(event.getPressed(Tecla.TSK_SETA_ESQUERDA)){
+			else if(event.getPressed(Tecla.TSK_LEFT_ARROW)||event.getPressed(Tecla.JOYSTICK_LEFT)){
 				turnLeft();
 			}
 		}
 
-		if(event.getPressed(Tecla.TSK_ESPACO)){
+		if(event.getPressed(Tecla.TSK_ESPACO)||event.getPressed(Tecla.JOYSTICK_BUTTON_1)){
 			startJump();
+		}
+		
+		if(event.getPressed(Tecla.TSK_SHIFT_LEFT)||event.getPressed(Tecla.JOYSTICK_BUTTON_3)){
+			walkSpeed = 5;
+		}else if(event.getReleased(Tecla.TSK_SHIFT_LEFT)||event.getReleased(Tecla.JOYSTICK_BUTTON_3)){
+			walkSpeed = 3;
 		}
 
 		return GUIEvent.NONE;
