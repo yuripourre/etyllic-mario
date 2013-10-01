@@ -2,10 +2,9 @@ package mario.stages;
 
 import br.com.etyllica.core.application.Application;
 import br.com.etyllica.core.event.GUIEvent;
-import br.com.etyllica.core.event.KeyboardEvent;
+import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
-import br.com.etyllica.core.event.Tecla;
-import br.com.etyllica.core.video.Grafico;
+import br.com.etyllica.core.video.Graphic;
 import br.com.etyllica.layer.AnimatedLayer;
 import br.com.etyllica.layer.ImageLayer;
 import br.com.etyllica.layer.StaticLayer;
@@ -66,7 +65,7 @@ public class YoshiHouse extends Application{
 
 
 		music = new Music("Yoster Island.mp3");
-		//music.play();
+		music.play();
 
 		updateAtFixedRate(40);
 		
@@ -115,7 +114,7 @@ public class YoshiHouse extends Application{
 	}
 
 	@Override
-	public void draw(Grafico g) {
+	public void draw(Graphic g) {
 
 		background.draw(g);
 		mario.draw(g);
@@ -123,21 +122,21 @@ public class YoshiHouse extends Application{
 	}
 
 	@Override
-	public GUIEvent updateKeyboard(KeyboardEvent event) {
+	public GUIEvent updateKeyboard(KeyEvent event) {
 
 		if(!walking){
 
 			//UP Arrow
-			if(event.getPressed(Tecla.TSK_UP_ARROW)||event.getPressed(Tecla.JOYSTICK_UP)){
+			if(event.onKeyDown(KeyEvent.TSK_UP_ARROW)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_UP)){
 				lookUp();				
-			}else if(event.getReleased(Tecla.TSK_UP_ARROW)||event.getPressed(Tecla.JOYSTICK_CENTER_Y)){
+			}else if(event.onKeyUp(KeyEvent.TSK_UP_ARROW)||event.onKeyUp(KeyEvent.TSK_JOYSTICK_CENTER_Y)){
 				stand();
 			}
 
 			//DOWN Arrow
-			if(event.getPressed(Tecla.TSK_DOWN_ARROW)||event.getPressed(Tecla.JOYSTICK_DOWN)){
+			if(event.onKeyDown(KeyEvent.TSK_DOWN_ARROW)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_DOWN)){
 				standDown();
-			}else if(event.getReleased(Tecla.TSK_DOWN_ARROW)||event.getReleased(Tecla.JOYSTICK_CENTER_Y)){
+			}else if(event.onKeyUp(KeyEvent.TSK_DOWN_ARROW)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_CENTER_Y)){
 				stand();
 			}
 		}
@@ -145,20 +144,20 @@ public class YoshiHouse extends Application{
 		if(!looking){
 
 			//RIGHT Arrow
-			if(event.getPressed(Tecla.TSK_RIGHT_ARROW)||event.getPressed(Tecla.JOYSTICK_RIGHT)){
+			if(event.onKeyDown(KeyEvent.TSK_RIGHT_ARROW)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_RIGHT)){
 				turnRight();
 				startWalking();
 
-			}else if(event.getReleased(Tecla.TSK_RIGHT_ARROW)||event.getPressed(Tecla.JOYSTICK_CENTER_X)){
+			}else if(event.onKeyUp(KeyEvent.TSK_RIGHT_ARROW)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_CENTER_X)){
 				stopWalk();
 			}
 
 			//LEFT Arrow
-			if(event.getPressed(Tecla.TSK_LEFT_ARROW)||event.getPressed(Tecla.JOYSTICK_LEFT)){
+			if(event.onKeyDown(KeyEvent.TSK_LEFT_ARROW)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_LEFT)){
 				turnLeft();
 				startWalking();
 
-			}else if(event.getReleased(Tecla.TSK_LEFT_ARROW)||event.getPressed(Tecla.JOYSTICK_CENTER_X)){
+			}else if(event.onKeyUp(KeyEvent.TSK_LEFT_ARROW)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_CENTER_X)){
 				stopWalk();
 			}
 
@@ -166,23 +165,23 @@ public class YoshiHouse extends Application{
 		}else{
 			
 			//RIGHT ARROW
-			if(event.getPressed(Tecla.TSK_RIGHT_ARROW)||event.getPressed(Tecla.JOYSTICK_RIGHT)){
+			if(event.onKeyDown(KeyEvent.TSK_RIGHT_ARROW)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_RIGHT)){
 				turnRight();
 			}
 			
 			//LEFT ARROW
-			else if(event.getPressed(Tecla.TSK_LEFT_ARROW)||event.getPressed(Tecla.JOYSTICK_LEFT)){
+			else if(event.onKeyDown(KeyEvent.TSK_LEFT_ARROW)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_LEFT)){
 				turnLeft();
 			}
 		}
 
-		if(event.getPressed(Tecla.TSK_ESPACO)||event.getPressed(Tecla.JOYSTICK_BUTTON_1)){
+		if(event.onKeyDown(KeyEvent.TSK_ESPACO)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_1)){
 			startJump();
 		}
 		
-		if(event.getPressed(Tecla.TSK_SHIFT_LEFT)||event.getPressed(Tecla.JOYSTICK_BUTTON_3)){
+		if(event.onKeyDown(KeyEvent.TSK_SHIFT_LEFT)||event.onKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_3)){
 			walkSpeed = 5;
-		}else if(event.getReleased(Tecla.TSK_SHIFT_LEFT)||event.getReleased(Tecla.JOYSTICK_BUTTON_3)){
+		}else if(event.onKeyUp(KeyEvent.TSK_SHIFT_LEFT)||event.onKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_3)){
 			walkSpeed = 3;
 		}
 
