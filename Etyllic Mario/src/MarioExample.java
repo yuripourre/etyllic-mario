@@ -10,7 +10,7 @@ public class MarioExample extends EtyllicaFrame {
 	public MarioExample() {
 		super(255, 236);
 		initSound = true;
-		initJoysick = true;
+		/*initJoysick = true;*/
 	}
 	
 	public static void main(String[] args){

@@ -1,5 +1,7 @@
 package mario.stages;
 
+import mario.item.fruit.RedFruit;
+import br.com.etyllica.animation.scripts.FrameAnimationScript;
 import br.com.etyllica.core.application.Application;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -39,6 +41,8 @@ public class YoshiHouse extends Application{
 	private int jumpSize = 32;
 
 	private int groundPosition = 163;
+	
+	private RedFruit[] fruits;
 
 	@Override
 	public void load() {
@@ -47,6 +51,20 @@ public class YoshiHouse extends Application{
 
 		//By default, engine looks for image at /bin/res/images folder
 		background = new ImageLayer("yoshihouse.png");
+		
+		fruits = new RedFruit[7];
+		fruits[0] = new RedFruit(32, 60);
+		fruits[1] = new RedFruit(48, 76);
+		fruits[2] = new RedFruit(96, 60);
+		fruits[3] = new RedFruit(78, 92);
+		fruits[4] = new RedFruit(114, 76);
+		fruits[5] = new RedFruit(176, 60);
+		fruits[6] = new RedFruit(208, 76);
+		
+		for(RedFruit fruit: fruits){
+			animation.add(new FrameAnimationScript(fruit));
+		}
+		
 		loading = 20;
 
 		marioRight = new StaticLayer("mario.png");
@@ -65,7 +83,7 @@ public class YoshiHouse extends Application{
 
 
 		music = new Music("Yoster Island.mp3");
-		music.play();
+		//music.play();
 
 		updateAtFixedRate(40);
 		
@@ -117,6 +135,12 @@ public class YoshiHouse extends Application{
 	public void draw(Graphic g) {
 
 		background.draw(g);
+		
+		for(RedFruit fruit: fruits){
+			fruit.draw(g);	
+		}
+		
+		
 		mario.draw(g);
 
 	}
