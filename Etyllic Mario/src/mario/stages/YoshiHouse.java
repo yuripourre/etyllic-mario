@@ -1,7 +1,7 @@
 package mario.stages;
 
 import mario.item.fruit.RedFruit;
-import br.com.etyllica.animation.scripts.FrameAnimationScript;
+import br.com.etyllica.animation.scripts.FrameAnimation;
 import br.com.etyllica.core.application.Application;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -62,7 +62,7 @@ public class YoshiHouse extends Application{
 		fruits[6] = new RedFruit(208, 76);
 		
 		for(RedFruit fruit: fruits){
-			animation.add(new FrameAnimationScript(fruit));
+			animation.add(new FrameAnimation(fruit));
 		}
 		
 		loading = 20;
@@ -71,7 +71,8 @@ public class YoshiHouse extends Application{
 		marioLeft = new StaticLayer("marioinv.png");
 
 		mario = new AnimatedLayer(30,groundPosition,32,32,marioRight.getPath());
-		mario.setFrames(2);
+		mario.setSpeed(250);
+		mario.setFrames(2);				
 
 		jumpSize = groundPosition-32;//groundPosition - 100 pixels 
 
