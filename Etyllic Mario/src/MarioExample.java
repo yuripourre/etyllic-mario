@@ -1,7 +1,9 @@
 
 
-import mario.stages.YoshiHouse;
+import mario.stages.first.YoshiHouse;
+import sound.MultimediaLoader;
 import br.com.etyllica.EtyllicaFrame;
+import br.com.etyllica.context.Application;
 
 public class MarioExample extends EtyllicaFrame {
 
@@ -9,20 +11,22 @@ public class MarioExample extends EtyllicaFrame {
 
 	public MarioExample() {
 		super(255, 236);
-		initSound = true;
+		//initSound = true;
 		/*initJoysick = true;*/
 	}
 	
 	public static void main(String[] args){
 		MarioExample marioExample = new MarioExample();
 		marioExample.init();
-		marioExample.setVisible(true);
 	}
 	
 	@Override
-	public void startGame() {
+	public Application startApplication() {
 		hideCursor();
-		setMainApplication(new YoshiHouse(w,h));
+		
+		addLoader(MultimediaLoader.getInstance());
+		
+		return new YoshiHouse(w,h);
 	}
 	
 }
