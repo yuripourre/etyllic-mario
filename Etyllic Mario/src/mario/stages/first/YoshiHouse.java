@@ -3,8 +3,6 @@ package mario.stages.first;
 import mario.item.fruit.RedFruit;
 import mario.player.Player;
 import sound.model.Music;
-import br.com.etyllica.animation.AnimationHandler;
-import br.com.etyllica.animation.scripts.FrameAnimation;
 import br.com.etyllica.context.Application;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -44,11 +42,7 @@ public class YoshiHouse extends Application {
 		fruits[4] = new RedFruit(114, 76);
 		fruits[5] = new RedFruit(176, 60);
 		fruits[6] = new RedFruit(208, 76);
-		
-		for(RedFruit fruit: fruits){
-			AnimationHandler.getInstance().add(new FrameAnimation(fruit));
-		}
-		
+				
 		loading = 20;
 
 		mario = new Player(30, groundPosition, "mario.png", "marioinv.png");
@@ -56,7 +50,7 @@ public class YoshiHouse extends Application {
 		loading = 80;
 
 		music = new Music("Yoster Island.mp3");
-		//music.play();
+		music.play();
 
 		updateAtFixedRate(50);
 		
@@ -68,6 +62,10 @@ public class YoshiHouse extends Application {
 	public void timeUpdate(long now) {
 		
 		mario.update(now);
+		
+		for(RedFruit fruit: fruits){
+			fruit.animate(now);	
+		}
 	}
 
 	@Override
