@@ -95,22 +95,22 @@ public class Player {
 
 	//Player Actions
 	private void stand(){
-		layer.setYImage(0);
-		layer.setXImage(0);
+		layer.setYImage(layer.getNeedleY()+0);
+		layer.setXImage(layer.getNeedleX()+0);
 
 		looking = false;
 	}
 
 	private void lookUp(){
-		layer.setYImage(layer.getTileH());
-		layer.setXImage(0);
+		layer.setYImage(layer.getNeedleY()+layer.getTileH());
+		layer.setXImage(layer.getNeedleX()+0);
 
 		looking = true;
 	}
 
 	private void standDown(){
-		layer.setXImage(layer.getTileW());
-		layer.setYImage(layer.getTileH());
+		layer.setXImage(layer.getNeedleX()+layer.getTileW());
+		layer.setYImage(layer.getNeedleY()+layer.getTileH());
 
 		looking = true;
 	}
@@ -120,8 +120,8 @@ public class Player {
 			jump.play();
 			jumping = true;
 
-			layer.setYImage(layer.getTileH()*2);
-			layer.setXImage(0);
+			layer.setYImage(layer.getNeedleY()+layer.getTileH()*2);
+			layer.setXImage(layer.getNeedleX()+0);
 		}
 	}
 
@@ -146,16 +146,15 @@ public class Player {
 		jumping = false;
 		fallen = false;
 
-		layer.setYImage(0);
-		layer.setXImage(0);
-
+		layer.setYImage(layer.getNeedleY()+0);
+		layer.setXImage(layer.getNeedleX()+0);
 	}
 
 	private void startFallen(){
 		fallen = true;
 
-		layer.setYImage(layer.getTileH()*2);
-		layer.setXImage(layer.getTileW());
+		layer.setYImage(layer.getNeedleY()+layer.getTileH()*2);
+		layer.setXImage(layer.getNeedleX()+layer.getTileW());
 	}
 
 	private void stopWalk(){
@@ -163,7 +162,7 @@ public class Player {
 		layer.setStopped(true);
 		walking = false;
 
-		layer.setXImage(0);
+		layer.setXImage(layer.getNeedleX()+0);
 	}
 
 	public void handleEvent(KeyEvent event) {
