@@ -26,6 +26,8 @@ public class Player {
 	private int jumpSpeed = 5;
 	private int jumpSize = 32;
 	private int groundPosition = 0;
+	
+	private boolean grown = false;
 
 	public Player(int x, int y, String rightLayerPath, String leftLayerPath) {
 		super();
@@ -229,4 +231,16 @@ public class Player {
 		
 	}
 
+	public AnimatedLayer getLayer() {
+		return layer;
+	}
+
+	public boolean isGrown() {
+		return grown;
+	}
+
+	public void setGrown(boolean grown) {
+		this.grown = grown;
+	}	
+	
 }

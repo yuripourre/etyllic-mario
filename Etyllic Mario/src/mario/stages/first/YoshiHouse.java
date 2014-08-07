@@ -3,6 +3,7 @@ package mario.stages.first;
 import mario.item.fruit.RedFruit;
 import mario.player.Player;
 import sound.model.Music;
+import br.com.etyllica.animation.scripts.NeedleAnimation;
 import br.com.etyllica.context.Application;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -16,13 +17,15 @@ public class YoshiHouse extends Application {
 		super(w, h);
 	}
 
+	private NeedleAnimation mushroomAnimation;
+	
 	private Music music;
 
 	private ImageLayer background;
 
 	private Player mario;
 
-	private int groundPosition = 163;
+	private int groundPosition = 158;
 	
 	private RedFruit[] fruits;
 
@@ -33,7 +36,7 @@ public class YoshiHouse extends Application {
 
 		//By default, engine looks for image at /bin/res/images folder
 		background = new ImageLayer("yoshihouse.png");
-		
+				
 		fruits = new RedFruit[7];
 		fruits[0] = new RedFruit(32, 60);
 		fruits[1] = new RedFruit(48, 76);
@@ -52,6 +55,11 @@ public class YoshiHouse extends Application {
 		music = new Music("Yoster Island.mp3");
 		music.play();
 
+		mushroomAnimation = new NeedleAnimation(200);
+		mushroomAnimation.setTarget(mario.getLayer());
+		mushroomAnimation.setNeedle(64, 0);
+		mushroomAnimation.setRepeat(4);
+		
 		updateAtFixedRate(50);
 		
 		loading = 100;
@@ -82,7 +90,12 @@ public class YoshiHouse extends Application {
 
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
-
+		
+		if(event.isKeyDown(KeyEvent.TSK_1)) {
+			scene.addAnimation(mushroomAnimation);
+			mario.setGrown(true);
+		}
+		
 		mario.handleEvent(event);
 
 		return GUIEvent.NONE;
