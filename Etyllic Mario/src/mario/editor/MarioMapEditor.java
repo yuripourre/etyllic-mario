@@ -20,7 +20,7 @@ public class MarioMapEditor extends MapApplication {
 	private final int tileWidth = 16;
 	private final int tileHeight = 16;
 
-	private int tileSetOffsetY = 300;
+	private int tileSetOffsetY = 380;
 	
 	private OrthogonalSelectionMap selectionPlatformMap;
 	
@@ -33,11 +33,11 @@ public class MarioMapEditor extends MapApplication {
 	@Override
 	public void load() {
 
-		final int columns = 200;
-		final int lines = 16;
+		final int columns = 320;
+		final int lines = 27;
 
 		editor = new OrthogonalMapEditor(columns, lines, tileWidth, tileHeight);
-		editor.translateMap(0, 40);
+		editor.translateMap(0, -152);
 
 		loading = 30;
 				
