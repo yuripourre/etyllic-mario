@@ -80,8 +80,6 @@ public class YoshiHouse extends Stage {
 			mario.grow();
 		}
 		
-		mario.handleEvent(event);
-
 		return GUIEvent.NONE;
 	}
 

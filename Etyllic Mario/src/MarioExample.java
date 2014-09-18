@@ -11,7 +11,8 @@ public class MarioExample extends EtyllicaFrame {
 
 	public MarioExample() {
 		//super(255, 236);
-		super(800, 600);
+		//super(800, 600);
+		super(512, 500);
 		
 		//initJoysick = true;
 	}

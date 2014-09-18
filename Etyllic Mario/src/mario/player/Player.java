@@ -1,7 +1,6 @@
 package mario.player;
 
 import sound.model.Sound;
-import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.layer.AnimatedLayer;
 import br.com.etyllica.layer.StaticLayer;
@@ -10,83 +9,59 @@ import br.com.tide.platform.player.PlatformPlayerListener;
 
 public class Player extends PlatformPlayer implements PlatformPlayerListener {
 
+	private static final int TILE_SIZE = 32;
+	
 	protected AnimatedLayer layer;
 
 	private StaticLayer rightLayer;
 	private StaticLayer leftLayer;
 
 	private Sound jump;
-	
-	private boolean jumping = false;
-	private boolean fallen = false;
-		
-	private int groundPosition = 0;
-	
+
+	private boolean hasSound = false;
+
 	protected boolean grown = false;
 
 	public Player(int x, int y, String rightLayerPath, String leftLayerPath) {
 		super();
 
-		final int TILE_SIZE = 32;
-		
+		this.x = x;
+		this.y = y;
+
 		//Configure Attributes
 		walkSpeed = 3;
 		runSpeed = 5;
 		jumpSpeed = 5;
-		jumpSize = 32;
-		
-		this.rightLayer =  new StaticLayer(rightLayerPath);
+		jumpHeight = 64;
 
-		this.leftLayer =  new StaticLayer(leftLayerPath);
+		this.rightLayer = new StaticLayer(rightLayerPath);
+
+		this.leftLayer = new StaticLayer(leftLayerPath);
 
 		layer = new AnimatedLayer(x, y, TILE_SIZE, TILE_SIZE, rightLayer.getPath());
 		layer.setSpeed(100);
-		//Force player to stand
-		stopWalk();
-		
-		groundPosition = y;
-		jumpSize = groundPosition-TILE_SIZE;//groundPosition - 100 pixels
 		
 		jump = new Sound("jump.wav");
-		
+
 		listener = this;
+		
+		//Force player to stand
+		stand();
 	}
 
 	@Override
 	public void update(long now) {
 		super.update(now);
-		
+
 		layer.animate(now);
 
-		layer.setX(x);
-		
-		//if jumping
-		if(jumping) {
-
-			if(!fallen) {
-
-				if(layer.getY()>jumpSize) {
-					layer.setY(layer.getY()-jumpSpeed);	
-				}else{
-					startFallen();
-				}
-
-			}else{
-
-				if(layer.getY()<groundPosition) {
-					layer.setY(layer.getY()+jumpSpeed);	
-				}else{
-					stopJump();
-				}
-			}
-		}
-
+		layer.setCoordinates(x, y);		
 	}
 
 	public void draw(Graphic g) {
 		layer.draw(g);
 	}
-	
+
 	//Player Actions
 	@Override
 	public void stand() {
@@ -94,38 +69,26 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 		layer.setXImage(layer.getNeedleX()+0);
 	}
 
-	public void jump() {
-		if(!jumping) {
-			jump.play();
-			jumping = true;
-	
-			layer.setFrames(1);
-			layer.setYImage(layer.getNeedleY()+layer.getTileH()*2);
-			layer.setXImage(layer.getNeedleX()+0);
-		}
-	}
-
 	private void startWalking() {
 		layer.setFrames(2);
 		layer.setStopped(false);
-	}	
+	}
 
-	private void stopJump() {
+	@Override
+	public void stopJump() {
+		super.stopJump();
 
-		jumping = false;
-		fallen = false;
+		stand();
 
-		layer.setYImage(layer.getNeedleY()+0);
-		layer.setXImage(layer.getNeedleX()+0);
-		
 		if(isWalking()) {
 			startWalking();
 		}
 	}
 
-	private void startFallen() {
-		fallen = true;
-
+	@Override
+	public void fall() {
+		super.fall();
+		
 		layer.setYImage(layer.getNeedleY()+layer.getTileH()*2);
 		layer.setXImage(layer.getNeedleX()+layer.getTileW());
 	}
@@ -133,25 +96,11 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 	@Override
 	public void stopWalk() {
 		super.stopWalk();
-		
+
 		layer.setFrames(1);
 		layer.setStopped(true);
 
 		layer.setXImage(layer.getNeedleX()+0);
-	}
-
-	public void handleEvent(KeyEvent event) {
-		
-		if(event.isKeyDown(KeyEvent.TSK_ESPACO)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_1)) {
-			jump();			
-		}
-		
-		if(event.isKeyDown(KeyEvent.TSK_SHIFT_LEFT)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_3)) {
-			currentSpeed = 5;
-		}else if(event.isKeyUp(KeyEvent.TSK_SHIFT_LEFT)||event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_3)) {
-			currentSpeed = 3;
-		}
-		
 	}
 
 	public AnimatedLayer getLayer() {
@@ -220,5 +169,40 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 	public void onStopStandDown() {
 		stopWalk();
 	}
-	
+
+	@Override
+	public void onJump() {
+		if(hasSound)
+			jump.play();
+
+		layer.setFrames(1);
+		layer.setYImage(layer.getNeedleY()+layer.getTileH()*2);
+		layer.setXImage(layer.getNeedleX()+0);		
+		
+	}
+
+	@Override
+	public void onFall() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRun() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStopJump() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStopRun() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
