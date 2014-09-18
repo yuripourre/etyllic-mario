@@ -5,35 +5,36 @@ import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.layer.AnimatedLayer;
 import br.com.etyllica.layer.StaticLayer;
+import br.com.tide.platform.player.PlatformPlayer;
+import br.com.tide.platform.player.PlatformPlayerListener;
 
-public class Player {
+public class Player extends PlatformPlayer implements PlatformPlayerListener {
 
-	private AnimatedLayer layer;
+	protected AnimatedLayer layer;
 
 	private StaticLayer rightLayer;
 	private StaticLayer leftLayer;
 
 	private Sound jump;
 	
-	private boolean right = true;
-	private boolean walking = false;
 	private boolean jumping = false;
 	private boolean fallen = false;
-
-	private boolean looking = false;
-	
-	private int walkSpeed = 3;
-	private int jumpSpeed = 5;
-	private int jumpSize = 32;
+		
 	private int groundPosition = 0;
 	
-	private boolean grown = false;
+	protected boolean grown = false;
 
 	public Player(int x, int y, String rightLayerPath, String leftLayerPath) {
 		super();
 
 		final int TILE_SIZE = 32;
-
+		
+		//Configure Attributes
+		walkSpeed = 3;
+		runSpeed = 5;
+		jumpSpeed = 5;
+		jumpSize = 32;
+		
 		this.rightLayer =  new StaticLayer(rightLayerPath);
 
 		this.leftLayer =  new StaticLayer(leftLayerPath);
@@ -47,23 +48,18 @@ public class Player {
 		jumpSize = groundPosition-TILE_SIZE;//groundPosition - 100 pixels
 		
 		jump = new Sound("jump.wav");
+		
+		listener = this;
 	}
 
+	@Override
 	public void update(long now) {
-
+		super.update(now);
+		
 		layer.animate(now);
 
-		//if walking
-		if(walking) {
-			//if walking to Right
-			if(right) {
-				layer.setX(layer.getX()+walkSpeed);
-				//if walking to Left
-			}else{
-				layer.setX(layer.getX()-walkSpeed);
-			}
-		}
-
+		layer.setX(x);
+		
 		//if jumping
 		if(jumping) {
 
@@ -82,150 +78,78 @@ public class Player {
 				}else{
 					stopJump();
 				}
-
 			}
 		}
 
 	}
 
 	public void draw(Graphic g) {
-
 		layer.draw(g);
 	}
-
+	
 	//Player Actions
-	private void stand(){
+	@Override
+	public void stand() {
 		layer.setYImage(layer.getNeedleY()+0);
 		layer.setXImage(layer.getNeedleX()+0);
-
-		looking = false;
 	}
 
-	private void lookUp(){
-		layer.setYImage(layer.getNeedleY()+layer.getTileH());
-		layer.setXImage(layer.getNeedleX()+0);
-
-		looking = true;
-	}
-
-	private void standDown(){
-		layer.setXImage(layer.getNeedleX()+layer.getTileW());
-		layer.setYImage(layer.getNeedleY()+layer.getTileH());
-
-		looking = true;
-	}
-
-	private void startJump(){
-		if(!jumping){
+	public void jump() {
+		if(!jumping) {
 			jump.play();
 			jumping = true;
-
+	
+			layer.setFrames(1);
 			layer.setYImage(layer.getNeedleY()+layer.getTileH()*2);
 			layer.setXImage(layer.getNeedleX()+0);
 		}
 	}
 
-	private void turnRight(){
-		layer.cloneLayer(rightLayer);
-		right = true;
-	}
-
-	private void turnLeft(){
-		layer.cloneLayer(leftLayer);
-		right = false;
-	}
-
-	private void startWalking(){
+	private void startWalking() {
 		layer.setFrames(2);
 		layer.setStopped(false);
-		walking = true;
 	}	
 
-	private void stopJump(){
+	private void stopJump() {
 
 		jumping = false;
 		fallen = false;
 
 		layer.setYImage(layer.getNeedleY()+0);
 		layer.setXImage(layer.getNeedleX()+0);
+		
+		if(isWalking()) {
+			startWalking();
+		}
 	}
 
-	private void startFallen(){
+	private void startFallen() {
 		fallen = true;
 
 		layer.setYImage(layer.getNeedleY()+layer.getTileH()*2);
 		layer.setXImage(layer.getNeedleX()+layer.getTileW());
 	}
 
-	private void stopWalk(){
+	@Override
+	public void stopWalk() {
+		super.stopWalk();
+		
 		layer.setFrames(1);
 		layer.setStopped(true);
-		walking = false;
 
 		layer.setXImage(layer.getNeedleX()+0);
 	}
 
 	public void handleEvent(KeyEvent event) {
 		
-		if(!walking){
-
-			//UP Arrow
-			if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_UP)){
-				lookUp();				
-			}else if(event.isKeyUp(KeyEvent.TSK_UP_ARROW)||event.isKeyUp(KeyEvent.TSK_JOYSTICK_CENTER_Y)){
-				stand();
-			}
-
-			//DOWN Arrow
-			if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_DOWN)){
-				standDown();
-			}else if(event.isKeyUp(KeyEvent.TSK_DOWN_ARROW)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_CENTER_Y)){
-				stand();
-			}
-		}
-
-		if(!looking){
-
-			//RIGHT Arrow
-			if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_RIGHT)){
-				turnRight();
-				startWalking();
-
-			}else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_CENTER_X)){
-				stopWalk();
-			}
-
-			//LEFT Arrow
-			if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_LEFT)){
-				turnLeft();
-				startWalking();
-
-			}else if(event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_CENTER_X)){
-				stopWalk();
-			}
-
-		//If Looking up or down
-		}else{
-			
-			//RIGHT ARROW
-			if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_RIGHT)){
-				turnRight();
-			}
-			
-			//LEFT ARROW
-			else if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_LEFT)){
-				turnLeft();
-			}
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_ESPACO)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_1)){
-			startJump();
+		if(event.isKeyDown(KeyEvent.TSK_ESPACO)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_1)) {
+			jump();			
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_SHIFT_LEFT)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_3)){
-			walkSpeed = 5;
-		}else if(event.isKeyUp(KeyEvent.TSK_SHIFT_LEFT)||event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_3)){
-			walkSpeed = 3;
+		if(event.isKeyDown(KeyEvent.TSK_SHIFT_LEFT)||event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_3)) {
+			currentSpeed = 5;
+		}else if(event.isKeyUp(KeyEvent.TSK_SHIFT_LEFT)||event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_3)) {
+			currentSpeed = 3;
 		}
 		
 	}
@@ -240,6 +164,61 @@ public class Player {
 
 	public void setGrown(boolean grown) {
 		this.grown = grown;
-	}	
+	}
+
+	@Override
+	public void onTurnLeft() {
+		layer.cloneLayer(leftLayer);
+	}
+
+	@Override
+	public void onTurnRight() {
+		layer.cloneLayer(rightLayer);
+	}
+
+	@Override
+	public void onWalkLeft() {
+		startWalking();
+	}
+
+	@Override
+	public void onWalkRight() {
+		startWalking();
+	}
+
+	@Override
+	public void onLookUp() {
+		layer.setYImage(layer.getNeedleY()+layer.getTileH());
+		layer.setXImage(layer.getNeedleX()+0);
+	}
+
+	@Override
+	public void onStandDown() {
+		layer.setXImage(layer.getNeedleX()+layer.getTileW());
+		layer.setYImage(layer.getNeedleY()+layer.getTileH());
+
+		layer.setFrames(1);
+		layer.setStopped(true);
+	}
+
+	@Override
+	public void onStopWalkLeft() {
+		stopWalk();		
+	}
+
+	@Override
+	public void onStopWalkRight() {
+		stopWalk();
+	}
+
+	@Override
+	public void onStopLookUp() {
+		stopWalk();
+	}
+
+	@Override
+	public void onStopStandDown() {
+		stopWalk();
+	}
 	
 }
