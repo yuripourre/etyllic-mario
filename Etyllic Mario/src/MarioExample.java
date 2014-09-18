@@ -1,6 +1,7 @@
 
 
 import mario.editor.MarioMapEditor;
+import mario.stages.first.YoshiIsland2;
 import br.com.etyllica.EtyllicaFrame;
 import br.com.etyllica.context.Application;
 
@@ -27,7 +28,9 @@ public class MarioExample extends EtyllicaFrame {
 		addLoader(MultimediaLoader.getInstance());
 		return new YoshiHouse(w,h);*/
 		
-		return new MarioMapEditor(w, h);
+		return new YoshiIsland2(w,h);
+		
+		//return new MarioMapEditor(w, h);
 	}
 	
 }

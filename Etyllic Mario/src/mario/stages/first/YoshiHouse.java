@@ -11,31 +11,26 @@ import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.layer.ImageLayer;
 
-public class YoshiHouse extends Application {
+public class YoshiHouse extends Stage {
 
 	public YoshiHouse(int w, int h) {
 		super(w, h);
 	}
-
-	private NeedleAnimation mushroomAnimation;
 	
 	private Music music;
 
 	private ImageLayer background;
-
-	private Player mario;
-
-	private int groundPosition = 158;
 	
 	private RedFruit[] fruits;
 
 	@Override
 	public void load() {
-
+				
 		loadingPhrase = "Loading Resources...";
 
 		//By default, engine looks for image at /bin/res/images folder
 		background = new ImageLayer("yoshihouse.png");
+		loading = 20;
 				
 		fruits = new RedFruit[7];
 		fruits[0] = new RedFruit(32, 60);
@@ -45,31 +40,21 @@ public class YoshiHouse extends Application {
 		fruits[4] = new RedFruit(114, 76);
 		fruits[5] = new RedFruit(176, 60);
 		fruits[6] = new RedFruit(208, 76);
-				
-		loading = 20;
-
-		mario = new Player(30, groundPosition, "mario.png", "marioinv.png");
 
 		loading = 80;
 
 		music = new Music("Yoster Island.mp3");
 		music.play();
-
-		mushroomAnimation = new NeedleAnimation(200);
-		mushroomAnimation.setTarget(mario.getLayer());
-		mushroomAnimation.setNeedle(64, 0);
-		mushroomAnimation.setRepeat(4);
+				
+		loading = 90;
 		
-		updateAtFixedRate(50);
-		
-		loading = 100;
+		super.load();
 
 	}
 	
 	@Override
 	public void timeUpdate(long now) {
-		
-		mario.update(now);
+		super.timeUpdate(now);
 		
 		for(RedFruit fruit: fruits){
 			fruit.animate(now);	
@@ -92,8 +77,7 @@ public class YoshiHouse extends Application {
 	public GUIEvent updateKeyboard(KeyEvent event) {
 		
 		if(event.isKeyDown(KeyEvent.TSK_1)) {
-			scene.addAnimation(mushroomAnimation);
-			mario.setGrown(true);
+			mario.grow();
 		}
 		
 		mario.handleEvent(event);
