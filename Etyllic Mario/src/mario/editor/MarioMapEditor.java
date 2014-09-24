@@ -8,10 +8,10 @@ import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.layer.ImageLayer;
 import br.com.vite.MapApplication;
-import br.com.vite.collection.tileset.LandTileSet;
+import br.com.vite.collection.tileset.land.LandTileSet;
 import br.com.vite.editor.OrthogonalMapEditor;
 import br.com.vite.export.MapExporter;
-import br.com.vite.map.selection.OrthogonalSelectionMap;
+import br.com.vite.map.selection.OrthogonalFloorSelection;
 
 public class MarioMapEditor extends MapApplication {
 	
@@ -22,7 +22,7 @@ public class MarioMapEditor extends MapApplication {
 
 	private int tileSetOffsetY = 380;
 	
-	private OrthogonalSelectionMap selectionPlatformMap;
+	private OrthogonalFloorSelection selectionPlatformMap;
 	
 	private ImageLayer background;
 
@@ -41,7 +41,7 @@ public class MarioMapEditor extends MapApplication {
 
 		loading = 30;
 				
-		selectionPlatformMap = new OrthogonalSelectionMap(10, 8, tileWidth, tileHeight);
+		selectionPlatformMap = new OrthogonalFloorSelection(10, 8, tileWidth, tileHeight);
 		selectionPlatformMap.translateMap(13*tileWidth, tileSetOffsetY);
 		selectionPlatformMap.setListener(editor);
 		selectionPlatformMap.setTileSet(new LandTileSet());
