@@ -20,12 +20,19 @@ public class Mario extends Player {
 	public void grow() {
 		
 		AnimationHandler.getInstance().add(mushroomAnimation);
-		grown = true;
-		
+		grown = true;		
 	}
 
+	@Override
 	public void setX(int x) {
+		super.setX(x);
 		layer.setX(x);
+	}
+	
+	@Override
+	public void setY(int y) {
+		super.setY(y);
+		layer.setY(y);
 	}
 
 }

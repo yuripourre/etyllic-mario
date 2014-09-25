@@ -35,7 +35,7 @@ public class Stage extends Application {
 	@Override
 	public void load() {
 		
-		mario = new Mario(30, groundPosition);
+		mario = new Mario(364, groundPosition);
 		
 		controller = new EasyController(mario);
 		
@@ -53,6 +53,8 @@ public class Stage extends Application {
 	
 	private static final int LOCK_SCENE = 192;
 	
+	private PointInt2D marioPoint = new PointInt2D();
+	
 	private PointInt2D targetPoint = new PointInt2D();
 	
 	private Tile target;
@@ -64,27 +66,74 @@ public class Stage extends Application {
 		int offset = mario.getX()-LOCK_SCENE;
 		
 		if(offset>0) {
-			mario.setX(LOCK_SCENE);
+			mario.getLayer().setX(LOCK_SCENE);
 			map.setOffsetX(-offset);
 			background.setOffset(offset);
 		}
 		
 		//Center coordinates
 		int marioX = mario.getX()+mario.getLayer().getTileW()/2+map.getOffsetX();
-		int marioY = mario.getY()+mario.getLayer().getTileH();
+		int marioY = mario.getY()+mario.getLayer().getTileH()/2+map.getOffsetY();
 				
-		map.updateTarget(marioX, marioY-16*3, targetPoint);
+		marioPoint.setLocation(marioX, marioY);
+		
+		map.updateTarget(marioX, marioY-16*2, targetPoint);
 				
 		target = map.getTiles()[targetPoint.getY()][targetPoint.getX()];
-								
+		
 		if(target.getCollision() != CollisionType.FREE) {
 			map.getFiller().setColor(Color.RED);
 		} else {
 			map.getFiller().setColor(Color.BLUE);
 		}
 		
-		target = map.getTiles()[targetPoint.getY()+2][targetPoint.getX()];
+		target = map.getTiles()[targetPoint.getY()][targetPoint.getX()];
+						
+		updateMario();
+	}
+	
+	private void updateMario() {
 		
+		Tile downTile = downTile(targetPoint);
+		
+		if(mario.isFalling()) {
+			
+			if(isPlatform(downTile)) {
+				//Move mario to tile Up
+				int positionY = map.getTileHeight()*(downTile.getY()/16);
+				System.out.println("Mario moved to "+positionY);
+				mario.setY(positionY);
+				
+				//Stop falling animation
+				mario.stopJump();
+			}
+			
+		} else if(!mario.isJumping()) {
+			if(!isPlatform(downTile)) {
+				mario.fall();
+			}
+		}
+	}
+	
+	private boolean isPlatform(Tile tile) {
+		
+		CollisionType collision = tile.getCollision();
+			
+		boolean isFixed = collision == CollisionType.UPPER || 
+				          collision == CollisionType.UPPER_RIGHT || 
+				          collision == CollisionType.UPPER_LEFT ||
+				          collision == CollisionType.BLOCK;
+		
+		return isFixed;
+		
+	}
+	
+	private Tile currentTile(PointInt2D point) {
+		return map.getTiles()[point.getY()][point.getX()];		
+	}
+	
+	private Tile downTile(PointInt2D point) {
+		return map.getTiles()[point.getY()+1][point.getX()];		
 	}
 
 	@Override
@@ -99,6 +148,11 @@ public class Stage extends Application {
 		mario.draw(g);
 		
 		map.drawTileFiller(g, target);
+		
+		g.setColor(Color.BLACK);
+		g.fillCircle(marioPoint.getX(), marioPoint.getY(), 8);
+		g.setColor(Color.ORANGE);
+		g.drawCircle(marioPoint.getX(), marioPoint.getY(), 8);
 	}
 	
 }

@@ -27,7 +27,7 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 
 		this.x = x;
 		this.y = y;
-
+		
 		//Configure Attributes
 		walkSpeed = 3;
 		runSpeed = 5;
@@ -61,7 +61,7 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 	public void draw(Graphic g) {
 		layer.draw(g);
 	}
-
+	
 	//Player Actions
 	@Override
 	public void stand() {
