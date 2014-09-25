@@ -24,7 +24,7 @@ public class Stage extends Application {
 	
 	protected Mario mario;
 	
-	protected int groundPosition = 392;
+	protected int groundPosition = 392; //8px offset
 	
 	protected ImageParallax background;
 	
@@ -100,7 +100,7 @@ public class Stage extends Application {
 			
 			if(isPlatform(downTile)) {
 				//Move mario to tile Up
-				int positionY = map.getTileHeight()*(downTile.getY()/16);
+				int positionY = map.getTileHeight()*(downTile.getY()/16)+8;
 				System.out.println("Mario moved to "+positionY);
 				mario.setY(positionY);
 				
@@ -149,9 +149,8 @@ public class Stage extends Application {
 		
 		map.drawTileFiller(g, target);
 		
+		g.setBasicStroke(2f);
 		g.setColor(Color.BLACK);
-		g.fillCircle(marioPoint.getX(), marioPoint.getY(), 8);
-		g.setColor(Color.ORANGE);
 		g.drawCircle(marioPoint.getX(), marioPoint.getY(), 8);
 	}
 	
