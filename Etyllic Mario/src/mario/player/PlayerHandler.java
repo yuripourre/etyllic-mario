@@ -78,25 +78,38 @@ public class PlayerHandler implements PlatformPlayerListener {
 			
 		} else if(!player.isJumping()) {
 						
-			if(player.hasState(PlayerState.WALK_RIGHT)) {
-				
-				Tile rightTile = currentTile(mapPoint);
-				
-				if(map.isBlock(rightTile)) {
-					//Move to far from tile
-					int currentTileX = currentTile(mapPoint).getX()-1;
-					int positionX = map.getTileWidth()*(currentTileX/map.getTileWidth());
-					System.out.println("moveX to "+positionX);
-					System.out.println(player.getLayer().getTileW());
-					player.setX(positionX);
-					//mario.stopWalk();
-					return;
-				}	
-			}
-			
 			if(!map.isPlatform(downTile)) {
 				player.fall();
 			}
+		}
+		
+		Tile currentTile = currentTile(mapPoint);
+		
+		if(player.hasState(PlayerState.WALK_RIGHT)) {
+							
+			if(map.isBlock(currentTile)) {
+				//Move to far from tile
+				int currentTileX = currentTile(mapPoint).getX()-1;
+				int positionX = map.getTileWidth()*(currentTileX/map.getTileWidth());
+				System.out.println("moveX to "+positionX);
+				player.setX(positionX);
+
+				return;
+			}
+		}
+		
+		else if(player.hasState(PlayerState.WALK_LEFT)) {
+			
+			if(map.isBlock(currentTile)) {
+				//Move to far from tile
+				int currentTileX = currentTile(mapPoint).getX();
+				int positionX = map.getTileWidth()*(1+(currentTileX/map.getTileWidth()))-1;
+				System.out.println("moveX to "+positionX);
+				player.setX(positionX);
+
+				return;
+			}
+			
 		}
 	}
 	
