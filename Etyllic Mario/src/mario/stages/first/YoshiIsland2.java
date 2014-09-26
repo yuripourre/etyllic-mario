@@ -21,6 +21,8 @@ public class YoshiIsland2 extends Stage {
 			e.printStackTrace();
 		}
 		
+		handler.setMap(map);
+		
 		background = new ImageParallax("background/forest.png");
 		background.setProximity(3);
 	}

@@ -1,10 +1,7 @@
 package mario.stages.first;
 
 import mario.item.fruit.RedFruit;
-import mario.player.Player;
 import sound.model.Music;
-import br.com.etyllica.animation.scripts.NeedleAnimation;
-import br.com.etyllica.context.Application;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;

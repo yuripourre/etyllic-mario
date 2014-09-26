@@ -8,8 +8,8 @@ public class Mario extends Player {
 
 	protected NeedleAnimation mushroomAnimation;
 	
-	public Mario(int x, int y) {
-		super(x, y, "mario.png", "marioinv.png");
+	public Mario(int x, int y, PlayerHandler handler) {
+		super(x, y, "mario.png", "marioinv.png", handler);
 		
 		mushroomAnimation = new NeedleAnimation(200);
 		mushroomAnimation.setTarget(getLayer());
@@ -34,5 +34,5 @@ public class Mario extends Player {
 		super.setY(y);
 		layer.setY(y);
 	}
-
+	
 }

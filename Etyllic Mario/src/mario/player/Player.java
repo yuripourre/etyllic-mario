@@ -5,11 +5,10 @@ import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.layer.AnimatedLayer;
 import br.com.etyllica.layer.StaticLayer;
 import br.com.tide.platform.player.PlatformPlayer;
-import br.com.tide.platform.player.PlatformPlayerListener;
 
-public class Player extends PlatformPlayer implements PlatformPlayerListener {
+public class Player extends PlatformPlayer {
 
-	private static final int TILE_SIZE = 32;
+	private static final int TILE_SIZE = 16;
 	
 	protected AnimatedLayer layer;
 
@@ -22,7 +21,7 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 
 	protected boolean grown = false;
 
-	public Player(int x, int y, String rightLayerPath, String leftLayerPath) {
+	public Player(int x, int y, String rightLayerPath, String leftLayerPath, PlayerHandler handler) {
 		super();
 
 		this.x = x;
@@ -38,12 +37,12 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 
 		this.leftLayer = new StaticLayer(leftLayerPath);
 
-		layer = new AnimatedLayer(x, y, TILE_SIZE, TILE_SIZE, rightLayer.getPath());
+		layer = new AnimatedLayer(x, y, TILE_SIZE, TILE_SIZE*2, rightLayer.getPath());
 		layer.setSpeed(100);
 		
 		jump = new Sound("jump.wav");
 
-		listener = this;
+		listener = handler;
 		
 		//Force player to stand
 		stand();
@@ -59,7 +58,7 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 	}
 
 	public void draw(Graphic g) {
-		layer.draw(g);
+		layer.draw(g, 0, -40);
 	}
 	
 	//Player Actions
@@ -69,7 +68,7 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 		layer.setXImage(layer.getNeedleX()+0);
 	}
 
-	private void startWalking() {
+	public void startWalking() {
 		layer.setFrames(2);
 		layer.setStopped(false);
 	}
@@ -114,95 +113,36 @@ public class Player extends PlatformPlayer implements PlatformPlayerListener {
 	public void setGrown(boolean grown) {
 		this.grown = grown;
 	}
-
-	@Override
-	public void onTurnLeft() {
+	
+	public void turnLeft() {
 		layer.cloneLayer(leftLayer);
 	}
-
-	@Override
-	public void onTurnRight() {
+	public void turnRight() {
 		layer.cloneLayer(rightLayer);
 	}
-
-	@Override
-	public void onWalkLeft() {
-		startWalking();
-	}
-
-	@Override
-	public void onWalkRight() {
-		startWalking();
-	}
-
-	@Override
-	public void onLookUp() {
+	
+	public void lookUpAction() {
+		super.lookUp();
 		layer.setYImage(layer.getNeedleY()+layer.getTileH());
 		layer.setXImage(layer.getNeedleX()+0);
 	}
-
-	@Override
-	public void onStandDown() {
+	
+	public void standDownAction() {
 		layer.setXImage(layer.getNeedleX()+layer.getTileW());
 		layer.setYImage(layer.getNeedleY()+layer.getTileH());
 
 		layer.setFrames(1);
 		layer.setStopped(true);
 	}
-
-	@Override
-	public void onStopWalkLeft() {
-		stopWalk();		
-	}
-
-	@Override
-	public void onStopWalkRight() {
-		stopWalk();
-	}
-
-	@Override
-	public void onStopLookUp() {
-		stopWalk();
-	}
-
-	@Override
-	public void onStopStandDown() {
-		stopWalk();
-	}
-
-	@Override
-	public void onJump() {
+	
+	public void jumpAction() {
+		//Move to listener
 		if(hasSound)
 			jump.play();
 
 		layer.setFrames(1);
 		layer.setYImage(layer.getNeedleY()+layer.getTileH()*2);
-		layer.setXImage(layer.getNeedleX()+0);		
-		
-	}
-
-	@Override
-	public void onFall() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onRun() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onStopJump() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onStopRun() {
-		// TODO Auto-generated method stub
-
+		layer.setXImage(layer.getNeedleX()+0);
 	}
 
 }
